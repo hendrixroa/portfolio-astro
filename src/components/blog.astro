@@ -1,0 +1,91 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+
+// Asume que tu colección de contenido para el blog se llama "blog"
+// y los archivos markdown están en `src/content/blog/`
+const posts = (await getCollection("posts")).sort(
+  (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+);
+---
+
+<section id="blog" class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+            Últimos <span class="text-[var(--primary-color)]">Artículos</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {
+            posts.map((post) => (
+                    <div class="group">
+                        <a href={`/blog/${post.slug}/`} class="block">
+                            <div class="rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 mb-4">
+                              {post.data.image ? (
+                                      <Image
+                                              src={post.data.image}
+                                              alt={post.data.title}
+                                              class="w-full h-48 md:h-72 object-cover group-hover:scale-105 transition-transform duration-300"
+                                              widths={[200, 400, 800]}
+                                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                              format="webp"
+                                      />
+                              ) : (
+                                      <div class="w-full h-48 md:h-72 bg-gray-200 flex items-center justify-center">
+                                          <span class="text-gray-500">Sin imagen</span>
+                                      </div>
+                              )}
+                            </div>
+                            <div class="flex items-start px-3">
+                                <div class="flex-grow">
+                                    <h4 class="text-2xl font-semibold">{post.data.title}</h4>
+                                  {post.data.pubDate && (
+                                          <span class="py-1 text-sm text-[var(--white-icon)]">
+                      {new Date(post.data.pubDate).toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </span>
+                                  )}
+                                </div>
+                                <div class="flex gap-2 ml-auto flex-shrink-0">
+                                    <a
+                                            href={`/blog/${post.slug}`}
+                                            aria-label="Leer artículo"
+                                            class="size-14 flex justify-center items-center text-[var(--white-icon)] hover:text-white transition duration-300 ease-in-out border border-1 border-[var(--white-icon-tr)] p-3 rounded-xl bg-[#1414149c] hover:bg-[var(--white-icon-tr)]"
+                                    >
+                                        <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                fill="currentColor"
+                                                class="size-7"
+                                        >
+                                            <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+            ))
+          }
+        </div>
+      {/* Opcional: Enlace a una página principal del blog si hay más artículos */}
+        <a
+                href="/blog"
+                aria-label="Más artículos"
+                class="w-full flex items-center justify-center gap-2 mt-9 text-[var(--white-icon)] hover:text-white transition duration-300 ease-in-out border border-[var(--white-icon-tr)] p-3 rounded-full bg-[#1414149c] hover:bg-[var(--white-icon-tr)] hover:scale-105"
+        >
+            <span class="md:text-lg text-md">Más artículos</span>
+          {/* Icono de ejemplo para "Más artículos" */}
+            <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="size-6"
+            >
+                <path d="M12 4l1.41 1.41L7.83 11H20v2H7.83l5.58 5.59L12 20l-8-8 8-8z" />
+            </svg>
+        </a>
+    </div>
+</section>

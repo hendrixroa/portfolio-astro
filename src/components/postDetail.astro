@@ -1,0 +1,168 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+// Define la interfaz de las props que espera este componente.
+// Asume que tu colección de contenido se llama 'posts'.
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+// Obtiene el componente <Content /> para renderizar el cuerpo del post (Markdown/MDX).
+const { Content } = await post.render();
+---
+
+<article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+  <header class="mb-8 md:mb-12 text-center">
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 md:mb-4 leading-tight balance-text">{post.data.title}</h1>
+    {post.data.pubDate && (
+      <p class="text-md md:text-lg text-[var(--white-icon)]">
+        Publicado el {new Date(post.data.pubDate).toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
+      </p>
+    )}
+  </header>
+
+  {post.data.image && (
+    <div class="mb-8 md:mb-12 rounded-xl overflow-hidden shadow-2xl">
+      <Image
+        src={post.data.image}
+        alt={`Imagen de portada para ${post.data.title}`}
+        class="w-full h-auto max-h-[300px] md:max-h-[500px] object-cover"
+        widths={[400, 800, 1200, 1600]}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 800px, 1200px"
+        format="webp"
+        loading="eager"
+      />
+    </div>
+  )}
+
+  <!--
+    Contenedor para el contenido del post.
+    Utiliza clases de Tailwind Typography (@tailwindcss/typography plugin) para estilizar el HTML generado desde Markdown.
+    Asegúrate de que el plugin esté instalado y configurado en tu `tailwind.config.js`.
+    'prose-invert' aplica estilos optimizados para temas oscuros.
+    'prose-lg' y 'md:prose-xl' ajustan el tamaño base de la tipografía.
+    'max-w-none' permite que el contenido dentro de 'prose' use el ancho completo si es necesario (ej. imágenes anchas).
+  -->
+  <div class="prose prose-lg md:prose-xl prose-invert max-w-none mx-auto">
+    <Content />
+  </div>
+
+  <footer class="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-[var(--white-icon-tr)] text-center">
+    <a
+      href="/blog"
+      class="inline-flex items-center gap-2 text-[var(--primary-color)] hover:text-white transition-colors duration-300 text-lg hover:underline"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+        <path d="M12 4l1.41 1.41L7.83 11H20v2H7.83l5.58 5.59L12 20l-8-8 8-8z" />
+      </svg>
+      Volver a todos los artículos
+    </a>
+  </footer>
+</article>
+
+<!--
+  Estilos globales opcionales para el contenido renderizado por <Content />.
+  Estos son útiles si no usas @tailwindcss/typography o necesitas personalizaciones específicas.
+  Define variables CSS para colores para facilitar la tematización.
+-->
+<style is:global>
+  .prose {
+    color: var(--text-prose, #d1d5db); /* Color de texto base para el contenido */
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: var(--heading-prose, #ffffff); /* Color para encabezados */
+    margin-bottom: 0.65em;
+    margin-top: 1.25em;
+    font-weight: 600;
+  }
+  .prose h1 { font-size: 2em; }
+  .prose h2 { font-size: 1.6em; }
+  .prose h3 { font-size: 1.3em; }
+
+  .prose p {
+    line-height: 1.75;
+    margin-bottom: 1.25em;
+  }
+  .prose a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .prose a:hover {
+    text-decoration: underline;
+  }
+  .prose strong {
+    color: var(--strong-prose, #ffffff);
+    font-weight: 600;
+  }
+  .prose em {
+    font-style: italic;
+  }
+  .prose ul, .prose ol {
+    margin-left: 1.5em; /* Ajusta según necesidad */
+    margin-bottom: 1.25em;
+    padding-left: 1.5em;
+  }
+  .prose li {
+    margin-bottom: 0.5em;
+  }
+  .prose li::marker {
+    color: var(--white-icon);
+  }
+  .prose blockquote {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-style: italic;
+    color: var(--blockquote-text-prose, #9ca3af); /* Color de texto para citas */
+  }
+  .prose pre {
+    background-color: #111827; /* Fondo oscuro para bloques de código, ajusta a tu tema */
+    color: #e5e7eb;
+    padding: 1.25em;
+    border-radius: 0.5rem; /* 8px */
+    overflow-x: auto;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+  }
+  .prose code {
+    background-color: #374151; /* Fondo para código en línea */
+    color: #e0e0e0; /* Color de texto para código en línea */
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem; /* 4px */
+    font-size: 0.875em; /* Ligeramente más pequeño */
+    word-wrap: break-word;
+  }
+  .prose pre code { /* Resetea estilos para código dentro de <pre> */
+    background-color: transparent;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+  .prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem; /* 12px, más redondeado */
+    margin-top: 2em;
+    margin-bottom: 2em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  }
+  .prose hr {
+    border-color: var(--white-icon-tr); /* Color de borde para reglas horizontales */
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;
+  }
+  .balance-text {
+    text-wrap: balance;
+  }
+</style>

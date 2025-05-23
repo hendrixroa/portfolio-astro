@@ -1,0 +1,22 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Nav from "@/components/nav.astro";
+import PostDetail from "@/components/postDetail.astro";
+import Footer from "@/components/footer.astro";
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('posts');
+    return posts.map(post => ({
+        params: { slug: post.slug },
+        props: { post },
+    }));
+}
+const { post } = Astro.props;
+---
+
+<Layout title="Oscar Hernandez">
+    <Nav />
+    <PostDetail post={post} } />
+    <Footer />
+</Layout>
