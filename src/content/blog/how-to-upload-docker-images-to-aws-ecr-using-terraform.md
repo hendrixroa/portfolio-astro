@@ -2,13 +2,13 @@
 title: "How to upload docker images to AWS ECR using Terraform"
 description: "Learn how to automate Docker image deployment to AWS ECR using Terraform. This guide covers creating ECR repositories, setting up lifecycle policies, and using null_resource to build and push Docker images with a complete Spring Boot example."
 pubDate: "Jun 09 2023"
-bannerImage: "/containers.svg"
+bannerImage: "/containers.jpg"
 tags: ["aws", "ecr", "terraform"]
 ---
 
 The containers and particularly docker containers have supposed an advance in the software industry allowing portability between different environments in the software development cycle in a faster way. There are multiple cloud providers that allow to creation, hosting, and running of containers, at this time I will focus on AWS ECR service. 
 
-The process to create a docker image has 4 steps: 
+## The process to create a docker image has 4 steps: 
 Create the docker file definition which contains all information about the docker image, operative system, and the steps to run the application. 
 
 Create the artifact locally: The Dockerfile is executed and create the artifact in local memory.
@@ -17,11 +17,10 @@ Establish a connection with an external registry where the artifact will be uplo
 
 Upload the artifact (docker image)
 
-Terraform resources
-Minimize image
-Edit image
-Delete image
-No alt text provided for this image
+## Terraform resources
+
+![Diagram ECR](/blog/how-to-upload-docker-images-to-aws-ecr-using-terraform/diagram-ecr.png)
+
 
 First of all, we need to create the AWS ECR resource to push docker images, ECR is similar to the docker hub registry. 
 
@@ -77,23 +76,17 @@ repository: require a link to the ECR repository
 
 Then after running terraform apply we can see the ECR repository created:
 
-Minimize image
-Edit image
-Delete image
-No alt text provided for this image
+![Checking ECR Resource](/blog/how-to-upload-docker-images-to-aws-ecr-using-terraform/check-ecr.png)
 
-Docker image packaging
+## Docker image packaging
 I will use a simple spring boot standalone application to create the docker image, you can use the stack of your preference, just be aware of the steps we need to follow to package the artifact and create the docker image to subsequently push on the ECR registry. 
 
 To prepare the project to create the docker image we should follow at least the steps: 
 
-Authenticate into ECR registry using the CLI, more info (https://docs.aws.amazon.com/cli/latest/reference/ecr/get-login-password.html)
-
- Command build to create the software artifact.
-
- Command to build the docker image locally 
-
- Command to push the docker image. 
+1. Authenticate into ECR registry using the CLI, more info (https://docs.aws.amazon.com/cli/latest/reference/ecr/get-login-password.html)
+1. Command build to create the software artifact.
+1. Command to build the docker image locally 
+1. Command to push the docker image. 
 
 For all those steps we are going to use the null_resource:
 
@@ -125,12 +118,9 @@ As you can see the second command would be the only command change you need to d
 
 After running Terraform apply you can see your docker image pushed and ready to use in any container runner that offers aws. 
 
-Minimize image
-Edit image
-Delete image
-No alt text provided for this image
+![Confirm ECR Resource](/blog/how-to-upload-docker-images-to-aws-ecr-using-terraform/confirm-ecr.png)
 
-Code example repository: https://github.com/hendrixroa/terraform-template/tree/post-how-to-create-ecr-image
+[Code example repository](https://github.com/hendrixroa/terraform-template/tree/post-how-to-create-ecr-image)
 
 
 Thanks for reading!
