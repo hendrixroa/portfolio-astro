@@ -8,7 +8,10 @@ const personalInfo = await getEntry("personal", "info");
 const personal: PersonalSchema = personalInfo.data;
 
 const experiences = await getCollection("experience");
-console.log(experiences);
+const sortedExperiences = experiences.sort((a, b) => {
+  return b.data.order - a.data.order;
+});
+
 ---
 
 <BaseLayout title="Resume" sideBarActiveItemID="cv">
@@ -25,9 +28,9 @@ console.log(experiences);
   </div>
 
   <div class="time-line-container mb-10">
-    { await Promise.all(experiences.map(async (experience) => {
+    <div class="space-y-10"></div>
+    { await Promise.all(sortedExperiences.map(async (experience) => {
       const { Content } = await experience.render();
-      console.log("content", Content);
       return (
         <TimeLineElement
           title={experience.data.title}
@@ -39,40 +42,4 @@ console.log(experiences);
         </TimeLineElement>
       );
     })) }
-  </div>
-
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Certifications</div>
-  </div>
-
-  <ul class="list-disc mx-6 mb-10 grid gap-2">
-    <li>
-      <a href="#" target="_blank"> Certification Name (with link)</a>
-    </li>
-    <li>
-      <a href="#" target="_blank"> Certification Name (with link)</a>
-    </li>
-  </ul>
-
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Skills</div>
-  </div>
-
-  <ul class="list-disc md:columns-5 columns-2 mx-6">
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-  </ul>
 </BaseLayout>
