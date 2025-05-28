@@ -1,0 +1,78 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import TimeLineElement from "../components/resume/TimeLine.astro";
+
+import { getEntry, getCollection } from "astro:content";
+import {type PersonalSchema} from "../content/schemas";
+const personalInfo = await getEntry("personal", "info");
+const personal: PersonalSchema = personalInfo.data;
+
+const experiences = await getCollection("experience");
+console.log(experiences);
+---
+
+<BaseLayout title="Resume" sideBarActiveItemID="cv">
+  <div class="mb-5">
+    <div class="text-3xl w-full font-bold">About me</div>
+  </div>
+
+  <div class="mb-10 text-justify">
+    <div set:html={personal.bio}></div>
+  </div>
+
+  <div class="mb-5">
+    <div class="text-3xl w-full font-bold">Experience</div>
+  </div>
+
+  <div class="time-line-container mb-10">
+    { await Promise.all(experiences.map(async (experience) => {
+      const { Content } = await experience.render();
+      console.log("content", Content);
+      return (
+        <TimeLineElement
+          title={experience.data.title}
+          date={experience.data.date}
+        >
+          <div class="prose prose-sm max-w-none">
+            <Content />
+          </div>
+        </TimeLineElement>
+      );
+    })) }
+  </div>
+
+  <div class="mb-5">
+    <div class="text-3xl w-full font-bold">Certifications</div>
+  </div>
+
+  <ul class="list-disc mx-6 mb-10 grid gap-2">
+    <li>
+      <a href="#" target="_blank"> Certification Name (with link)</a>
+    </li>
+    <li>
+      <a href="#" target="_blank"> Certification Name (with link)</a>
+    </li>
+  </ul>
+
+  <div class="mb-5">
+    <div class="text-3xl w-full font-bold">Skills</div>
+  </div>
+
+  <ul class="list-disc md:columns-5 columns-2 mx-6">
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+    <li>Skill Name</li>
+  </ul>
+</BaseLayout>
