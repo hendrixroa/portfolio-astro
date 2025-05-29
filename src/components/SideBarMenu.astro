@@ -1,11 +1,6 @@
 ---
 const { sideBarActiveItemID } = Astro.props;
 const activeClass = "bg-base-300";
-
-import { getEntry } from "astro:content";
-import {type PersonalSchema} from "../content/schemas";
-const personalInfo = await getEntry("personal", "info");
-const personal: PersonalSchema = personalInfo.data;
 ---
 
 <ul class="menu grow shrink menu-md overflow-y-auto">
@@ -13,14 +8,7 @@ const personal: PersonalSchema = personalInfo.data;
     <li><a class="py-3 text-base" id="blog" href="/blog/">Blog</a></li>
     <li><a class="py-3 text-base" id="projects" href="/projects">Projects</a></li>
     <li><a class="py-3 text-base" id="resume" href="/resume">Resume</a></li>
-    <li>
-        <a
-            class="py-3 text-base"
-            href={"mailto:" + personal.name }
-            target="_blank"
-            referrerpolicy="no-referrer-when-downgrade">Contact</a
-        >
-    </li>
+    <li><a class="py-3 text-base" id="contact" href="/contact">Contact</a></li>
 </ul>
 
 <script define:vars={{ sideBarActiveItemID: sideBarActiveItemID, activeClass: activeClass }}>

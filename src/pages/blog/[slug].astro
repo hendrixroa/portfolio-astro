@@ -2,6 +2,7 @@
 import { CollectionEntry, getCollection } from "astro:content";
 import { BlogSchema } from "../../content/schemas";
 import PostLayout from "../../layouts/PostLayout.astro";
+import { createUrlBanner } from "../../lib/createUrlBanner";
 import createSlug from "../../lib/createSlug"
 
 export async function getStaticPaths() {
@@ -19,7 +20,7 @@ interface Props {
 const { entry } = Astro.props;
 const post: BlogSchema = entry.data;
 const { Content } = await entry.render();
-const bannerImage = '/blog/' + entry.slug + post.bannerImage;
+const bannerImage = createUrlBanner(entry.slug, post.bannerImage as string);
 console.log("Banner Image: ", bannerImage);
 ---
 
@@ -32,7 +33,7 @@ console.log("Banner Image: ", bannerImage);
   badge={post.badge}
   tags={post.tags}
 >
-  <Content />
+<Content />
 <script src="https://giscus.app/client.js"
     data-repo="hendrixroa/portfolio-astro"
     data-repo-id="R_kgDOOveqng"

@@ -10,6 +10,7 @@ const blogSchema = z.object({
     tags: z.array(z.string()).refine(items => new Set(items).size === items.length, {
         message: 'tags must be unique',
     }).optional(),
+    externalUrl: z.string().url().optional(),
 });
 
 const personalSchema = z.object({
@@ -21,6 +22,7 @@ const personalSchema = z.object({
     linkedin: z.string().url(),
     email: z.string().email(),
     summary: z.string(),
+    phone: z.string().optional(),
 });
 
 const experienceSchema = z.object({

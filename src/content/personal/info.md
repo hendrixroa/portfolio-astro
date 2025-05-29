@@ -9,8 +9,9 @@ bio: |
 role: "AI Engineer"
 url: "https://hendrixroa.dev"
 github: "https://github.com/hendrixroa"
-linkedin: "https://www.linkedin.com/in/hendrixroa"
+linkedin: "https://www.linkedin.com/in/hendrix-roa"
 email: "me@hendrixroa.dev"
 summary: |
   My 10-year software engineering journey culminated in deep expertise in backend architecture (designing sustainable, scalable systems with clean code) and DevOps automation (Terraform, CDK, CI/CD for reliable, distributed deployments). I'm now channeling this combination to build and scale impactful AI projects, leveraging robust system design and efficient operational practices to drive AI innovation.
+phone: "+57-317-7693868"  
 ---
